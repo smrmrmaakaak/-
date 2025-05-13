@@ -2,35 +2,35 @@
 
 --[[
   EquipmentUIBuilder (ModuleScript)
-  Àåºñ Ã¢ UI¸¦ »ı¼ºÇÕ´Ï´Ù.
-  *** [¼öÁ¤] ½½·Ô ÀüÃ¼ À§Ä¡ À§·Î Á¶Á¤, ½½·Ô µğÀÚÀÎ °³¼± (Å×µÎ¸® À¯Áö, ¾ÆÀÌÄÜ ºĞ¸®) ***
+  ì¥ë¹„ ì°½ UIë¥¼ ìƒì„±í•©ë‹ˆë‹¤.
+  *** [ìˆ˜ì •] ìŠ¬ë¡¯ ì „ì²´ ìœ„ì¹˜ ìœ„ë¡œ ì¡°ì •, ìŠ¬ë¡¯ ë””ìì¸ ê°œì„  (í…Œë‘ë¦¬ ìœ ì§€, ì•„ì´ì½˜ ë¶„ë¦¬) ***
 ]]
 local EquipmentUIBuilder = {}
 
 function EquipmentUIBuilder.Build(mainGui, backgroundFrame, framesFolder, GuiUtils)
-	print("EquipmentUIBuilder: Àåºñ Ã¢ UI »ı¼º ½ÃÀÛ (½½·Ô ÀüÃ¼ À§Ä¡ À§·Î Á¶Á¤)...")
+	print("EquipmentUIBuilder: ì¥ë¹„ ì°½ UI ìƒì„± ì‹œì‘ (ìŠ¬ë¡¯ ì „ì²´ ìœ„ì¹˜ ìœ„ë¡œ ì¡°ì •)...")
 
 	local cornerRadius = UDim.new(0, 8)
 
-	-- ±âº» ½½·Ô ¾ÆÀÌÄÜ ÀÌ¹ÌÁö ID (½ÇÁ¦ ID·Î ±³Ã¼ ÇÊ¿ä)
-	local defaultWeaponSlotIconImage = "rbxassetid://YOUR_DEFAULT_WEAPON_ICON_ID"
-	local defaultArmorSlotIconImage = "rbxassetid://YOUR_DEFAULT_ARMOR_ICON_ID"
-	local defaultAccessorySlotIconImage = "rbxassetid://YOUR_DEFAULT_ACCESSORY_ICON_ID"
-	local defaultIconTransparency = 0 -- ±âº» ¾ÆÀÌÄÜ ¼±¸íÇÏ°Ô (0 = ºÒÅõ¸í)
+	-- ê¸°ë³¸ ìŠ¬ë¡¯ ì•„ì´ì½˜ ì´ë¯¸ì§€ ID (ì‹¤ì œ IDë¡œ êµì²´ í•„ìš”)
+	local defaultWeaponSlotIconImage = "rbxassetid://122953630794668"
+	local defaultArmorSlotIconImage = "rbxassetid://107446706579540"
+	local defaultAccessorySlotIconImage = "rbxassetid://102260956806130"
+	local defaultIconTransparency = 0 -- ê¸°ë³¸ ì•„ì´ì½˜ ì„ ëª…í•˜ê²Œ (0 = ë¶ˆíˆ¬ëª…)
 
 	local equipmentFrame = Instance.new("Frame")
 	equipmentFrame.Name = "EquipmentFrame"
 	equipmentFrame.Parent = backgroundFrame
 	equipmentFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 	equipmentFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-	equipmentFrame.Size = UDim2.new(0.4, 0, 0.75, 0) -- ¼¼·Î Å©±â´Â ÀÌÀü Á¶Á¤°ª À¯Áö
+	equipmentFrame.Size = UDim2.new(0.4, 0, 0.75, 0) -- ì„¸ë¡œ í¬ê¸°ëŠ” ì´ì „ ì¡°ì •ê°’ ìœ ì§€
 	equipmentFrame.BackgroundColor3 = Color3.fromRGB(70, 50, 70)
 	equipmentFrame.BorderColor3 = Color3.fromRGB(200, 180, 200)
 	equipmentFrame.BorderSizePixel = 2
 	equipmentFrame.Visible = false
 	equipmentFrame.ZIndex = 5
 	Instance.new("UICorner", equipmentFrame).CornerRadius = cornerRadius
-	print("EquipmentUIBuilder: EquipmentFrame »ı¼ºµÊ")
+	print("EquipmentUIBuilder: EquipmentFrame ìƒì„±ë¨")
 
 	local padding = Instance.new("UIPadding")
 	padding.Parent = equipmentFrame
@@ -40,27 +40,27 @@ function EquipmentUIBuilder.Build(mainGui, backgroundFrame, framesFolder, GuiUti
 	padding.PaddingRight = UDim.new(0, 10)
 
 	local titleLabel = GuiUtils.CreateTextLabel(equipmentFrame, "TitleLabel",
-		UDim2.new(0.5, 0, 0, padding.PaddingTop.Offset + 5), -- PaddingTop ÀÌÈÄ ¾à°£ÀÇ ¿©À¯
-		UDim2.new(1, -(padding.PaddingLeft.Offset + padding.PaddingRight.Offset), 0, 30), -- ³Êºñ´Â ÆĞµù °í·Á
-		"Àåºñ", Vector2.new(0.5, 0), Enum.TextXAlignment.Center, Enum.TextYAlignment.Center, 20
+		UDim2.new(0.5, 0, 0, padding.PaddingTop.Offset + 5), -- PaddingTop ì´í›„ ì•½ê°„ì˜ ì—¬ìœ 
+		UDim2.new(1, -(padding.PaddingLeft.Offset + padding.PaddingRight.Offset), 0, 30), -- ë„ˆë¹„ëŠ” íŒ¨ë”© ê³ ë ¤
+		"ì¥ë¹„", Vector2.new(0.5, 0), Enum.TextXAlignment.Center, Enum.TextYAlignment.Center, 20
 	)
-	-- Å¸ÀÌÆ² ·¹ÀÌºíÀÇ ½ÇÁ¦ ³ôÀÌ¸¦ °¡Á®¿À°Å³ª ¿¹»óµÇ´Â ³ôÀÌ¸¦ »ç¿ëÇÕ´Ï´Ù.
-	-- GuiUtils.CreateTextLabelÀÌ ¹İÈ¯ÇÏ´Â TextLabelÀÇ AbsoluteSize.Y´Â ÀÌ ½ÃÁ¡¿¡¼­ 0ÀÏ ¼ö ÀÖÀ¸¹Ç·Î,
-	-- Size.Y.Offset (30)À» »ç¿ëÇÕ´Ï´Ù.
+	-- íƒ€ì´í‹€ ë ˆì´ë¸”ì˜ ì‹¤ì œ ë†’ì´ë¥¼ ê°€ì ¸ì˜¤ê±°ë‚˜ ì˜ˆìƒë˜ëŠ” ë†’ì´ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
+	-- GuiUtils.CreateTextLabelì´ ë°˜í™˜í•˜ëŠ” TextLabelì˜ AbsoluteSize.YëŠ” ì´ ì‹œì ì—ì„œ 0ì¼ ìˆ˜ ìˆìœ¼ë¯€ë¡œ,
+	-- Size.Y.Offset (30)ì„ ì‚¬ìš©í•©ë‹ˆë‹¤.
 	local titleLabelHeight = titleLabel.Size.Y.Offset
-	local titleBottomYOffset = padding.PaddingTop.Offset + titleLabelHeight + 10 -- Å¸ÀÌÆ² ÇÏ´Ü Y ¿ÀÇÁ¼Â + Ãß°¡ ¿©¹é
+	local titleBottomYOffset = padding.PaddingTop.Offset + titleLabelHeight + 10 -- íƒ€ì´í‹€ í•˜ë‹¨ Y ì˜¤í”„ì…‹ + ì¶”ê°€ ì—¬ë°±
 
 	local slotSize = UDim2.new(0, 64, 0, 64)
-	local slotStartXScale = 0.3 -- ÇÁ·¹ÀÓ ³»ºÎ¿¡¼­ÀÇ »ó´ëÀû X À§Ä¡ (ÆĞµù °í·Á ½Ã Á¶Á¤ ÇÊ¿äÇÒ ¼ö ÀÖÀ½)
-	-- ¶Ç´Â UDim2.new(0, padding.PaddingLeft.Offset + ¿øÇÏ´ÂX¿ÀÇÁ¼Â, ...)
+	local slotStartXScale = 0.3 -- í”„ë ˆì„ ë‚´ë¶€ì—ì„œì˜ ìƒëŒ€ì  X ìœ„ì¹˜ (íŒ¨ë”© ê³ ë ¤ ì‹œ ì¡°ì • í•„ìš”í•  ìˆ˜ ìˆìŒ)
+	-- ë˜ëŠ” UDim2.new(0, padding.PaddingLeft.Offset + ì›í•˜ëŠ”Xì˜¤í”„ì…‹, ...)
 
-	-- <<< slotStartYOffset Á¶Á¤: ½½·ÔµéÀ» ÀüÃ¼ÀûÀ¸·Î À§·Î ¿Ã¸³´Ï´Ù >>>
-	-- ÀÌÀü °ª: local slotStartYOffset = titleBottomYOffset (Å¸ÀÌÆ² ¹Ù·Î ¾Æ·¡ 10px ¿©¹é)
-	-- Á¶±İ ´õ À§·Î ¿Ã¸®·Á¸é ÀÌ °ªÀ» ÁÙÀÔ´Ï´Ù. ¿¹: Å¸ÀÌÆ² ¹Ù·Î ¾Æ·¡ 5px ¿©¹é
+	-- <<< slotStartYOffset ì¡°ì •: ìŠ¬ë¡¯ë“¤ì„ ì „ì²´ì ìœ¼ë¡œ ìœ„ë¡œ ì˜¬ë¦½ë‹ˆë‹¤ >>>
+	-- ì´ì „ ê°’: local slotStartYOffset = titleBottomYOffset (íƒ€ì´í‹€ ë°”ë¡œ ì•„ë˜ 10px ì—¬ë°±)
+	-- ì¡°ê¸ˆ ë” ìœ„ë¡œ ì˜¬ë¦¬ë ¤ë©´ ì´ ê°’ì„ ì¤„ì…ë‹ˆë‹¤. ì˜ˆ: íƒ€ì´í‹€ ë°”ë¡œ ì•„ë˜ 5px ì—¬ë°±
 	local slotStartYOffset = padding.PaddingTop.Offset + titleLabelHeight + 4
-	-- ¶Ç´Â °íÁ¤°ªÀ¸·Î ´õ À§·Î: local slotStartYOffset = 30 (°ªÀÌ ÀÛÀ»¼ö·Ï À§·Î ¿Ã¶ó°¨, PaddingTopº¸´Ù´Â Ä¿¾ß ÇÔ)
+	-- ë˜ëŠ” ê³ ì •ê°’ìœ¼ë¡œ ë” ìœ„ë¡œ: local slotStartYOffset = 30 (ê°’ì´ ì‘ì„ìˆ˜ë¡ ìœ„ë¡œ ì˜¬ë¼ê°, PaddingTopë³´ë‹¤ëŠ” ì»¤ì•¼ í•¨)
 
-	local slotSpacingYPixels = 75 -- °¢ ½½·ÔÀÇ ½ÃÀÛÁ¡ Y ¿ÀÇÁ¼Â °£°İ (½½·Ô ³ôÀÌ 64px + °£°İ 11px)
+	local slotSpacingYPixels = 75 -- ê° ìŠ¬ë¡¯ì˜ ì‹œì‘ì  Y ì˜¤í”„ì…‹ ê°„ê²© (ìŠ¬ë¡¯ ë†’ì´ 64px + ê°„ê²© 11px)
 	local labelOffsetX = 0.25
 	local slotBackgroundColor = Color3.fromRGB(40, 40, 45)
 	local slotBorderColor = Color3.fromRGB(100,100,100)
@@ -116,29 +116,29 @@ function EquipmentUIBuilder.Build(mainGui, backgroundFrame, framesFolder, GuiUti
 		ratingStroke.Transparency = 1
 		ratingStroke.Parent = slotButton
 
-		-- °­È­ ·¹º§ Ç¥½Ã¿ë TextLabel Ãß°¡ (InventoryUIManager¿¡¼­ ³»¿ë ¾÷µ¥ÀÌÆ®)
+		-- ê°•í™” ë ˆë²¨ í‘œì‹œìš© TextLabel ì¶”ê°€ (InventoryUIManagerì—ì„œ ë‚´ìš© ì—…ë°ì´íŠ¸)
 		local levelLabel = GuiUtils.CreateTextLabel(slotButton, "LevelLabel",
-			UDim2.new(1, -2, 0, 2), UDim2.new(0.3, 10, 0.2, 0), -- ¿À¸¥ÂÊ À§¿¡ ÀÛ°Ô Ç¥½Ã
+			UDim2.new(1, -2, 0, 2), UDim2.new(0.3, 10, 0.2, 0), -- ì˜¤ë¥¸ìª½ ìœ„ì— ì‘ê²Œ í‘œì‹œ
 			"", Vector2.new(1,0), Enum.TextXAlignment.Right, Enum.TextYAlignment.Top, 10, Color3.fromRGB(255,230,150)
 		)
 		levelLabel.TextStrokeTransparency = 0.5
-		levelLabel.ZIndex = slotButton.ZIndex + 3 -- ¾ÆÀÌÄÜº¸´Ù À§¿¡ Ç¥½Ã
-		levelLabel.Visible = false -- ÃÊ±â¿¡´Â ¼û±è
+		levelLabel.ZIndex = slotButton.ZIndex + 3 -- ì•„ì´ì½˜ë³´ë‹¤ ìœ„ì— í‘œì‹œ
+		levelLabel.Visible = false -- ì´ˆê¸°ì—ëŠ” ìˆ¨ê¹€
 
 		GuiUtils.CreateTextLabel(parent, name.."Label",
 			UDim2.new(slotYPos.X.Scale + labelOffsetX, slotYPos.X.Offset, slotYPos.Y.Scale, slotYPos.Y.Offset),
 			UDim2.new(0.3, 0, slotSize.Y.Offset, 0), labelText, Vector2.new(0, 0),
 			Enum.TextXAlignment.Left, Enum.TextYAlignment.Center, 14
 		)
-		print("EquipmentUIBuilder: "..name.." »ı¼ºµÊ (YÀ§Ä¡: " .. slotYPos.Y.Offset .. ")")
+		print("EquipmentUIBuilder: "..name.." ìƒì„±ë¨ (Yìœ„ì¹˜: " .. slotYPos.Y.Offset .. ")")
 		return slotButton
 	end
 
-	createEquipmentSlot(equipmentFrame, "WeaponSlot", 0, "¹«±â", defaultWeaponSlotIconImage)
-	createEquipmentSlot(equipmentFrame, "ArmorSlot", 1, "¹æ¾î±¸", defaultArmorSlotIconImage)
-	createEquipmentSlot(equipmentFrame, "AccessorySlot1", 2, "¾Ç¼¼»ç¸® 1", defaultAccessorySlotIconImage)
-	createEquipmentSlot(equipmentFrame, "AccessorySlot2", 3, "¾Ç¼¼»ç¸® 2", defaultAccessorySlotIconImage)
-	createEquipmentSlot(equipmentFrame, "AccessorySlot3", 4, "¾Ç¼¼»ç¸® 3", defaultAccessorySlotIconImage)
+	createEquipmentSlot(equipmentFrame, "WeaponSlot", 0, "ë¬´ê¸°", defaultWeaponSlotIconImage)
+	createEquipmentSlot(equipmentFrame, "ArmorSlot", 1, "ë°©ì–´êµ¬", defaultArmorSlotIconImage)
+	createEquipmentSlot(equipmentFrame, "AccessorySlot1", 2, "ì•…ì„¸ì‚¬ë¦¬ 1", defaultAccessorySlotIconImage)
+	createEquipmentSlot(equipmentFrame, "AccessorySlot2", 3, "ì•…ì„¸ì‚¬ë¦¬ 2", defaultAccessorySlotIconImage)
+	createEquipmentSlot(equipmentFrame, "AccessorySlot3", 4, "ì•…ì„¸ì‚¬ë¦¬ 3", defaultAccessorySlotIconImage)
 
 	local closeEquipmentButton = Instance.new("TextButton")
 	closeEquipmentButton.Name = "CloseButton"
@@ -150,13 +150,13 @@ function EquipmentUIBuilder.Build(mainGui, backgroundFrame, framesFolder, GuiUti
 	closeEquipmentButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 	closeEquipmentButton.TextScaled = true
 	closeEquipmentButton.Font = Enum.Font.SourceSansBold
-	closeEquipmentButton.Text = "´İ±â"
+	closeEquipmentButton.Text = "ë‹«ê¸°"
 	closeEquipmentButton.BorderSizePixel = 0
 	closeEquipmentButton.ZIndex = 6
 	Instance.new("UICorner", closeEquipmentButton).CornerRadius = cornerRadius
-	print("EquipmentUIBuilder: EquipmentFrame CloseButton »ı¼ºµÊ")
+	print("EquipmentUIBuilder: EquipmentFrame CloseButton ìƒì„±ë¨")
 
-	print("EquipmentUIBuilder: Àåºñ Ã¢ UI »ı¼º ¿Ï·á (½½·Ô ÀüÃ¼ À§Ä¡ À§·Î Á¶Á¤µÊ).")
+	print("EquipmentUIBuilder: ì¥ë¹„ ì°½ UI ìƒì„± ì™„ë£Œ (ìŠ¬ë¡¯ ì „ì²´ ìœ„ì¹˜ ìœ„ë¡œ ì¡°ì •ë¨).")
 end
 
 return EquipmentUIBuilder
