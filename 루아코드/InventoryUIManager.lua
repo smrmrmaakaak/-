@@ -1,12 +1,12 @@
--- InventoryUIManager.lua (¼öÁ¤: ShowTooltipForEquippedSlot¿¡¼­ isEquipped ¸í½ÃÀû Àü´Ş, UI Ã¢ °ãÄ§ ¹æÁö ·ÎÁ÷ Àû¿ë, Àåºñ ½½·Ô µğÀÚÀÎ °³¼± ¹İ¿µ)
+-- InventoryUIManager.lua (ìˆ˜ì •: ShowTooltipForEquippedSlotì—ì„œ isEquipped ëª…ì‹œì  ì „ë‹¬, UI ì°½ ê²¹ì¹¨ ë°©ì§€ ë¡œì§ ì ìš©, ì¥ë¹„ ìŠ¬ë¡¯ ë””ìì¸ ê°œì„  ë°˜ì˜)
 
 local InventoryUIManager = {}
 
--- ÇÊ¿äÇÑ ¼­ºñ½º ¹× ¸ğµâ ·Îµå
+-- í•„ìš”í•œ ì„œë¹„ìŠ¤ ë° ëª¨ë“ˆ ë¡œë“œ
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local HttpService = game:GetService("HttpService") -- URL ÀÎÄÚµù À§ÇØ Ãß°¡
-local UserInputService = game:GetService("UserInputService") -- ¸¶¿ì½º À§Ä¡ °¨Áö À§ÇØ Ãß°¡
+local HttpService = game:GetService("HttpService") -- URL ì¸ì½”ë”© ìœ„í•´ ì¶”ê°€
+local UserInputService = game:GetService("UserInputService") -- ë§ˆìš°ìŠ¤ ìœ„ì¹˜ ê°ì§€ ìœ„í•´ ì¶”ê°€
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -20,7 +20,7 @@ local CoreUIManager
 local getPlayerInventoryFunction
 local getEquippedItemsFunction
 
--- µî±Şº° »ö»ó Á¤ÀÇ
+-- ë“±ê¸‰ë³„ ìƒ‰ìƒ ì •ì˜
 local RATING_COLORS = {
 	["Common"] = Color3.fromRGB(180, 180, 180),
 	["Uncommon"] = Color3.fromRGB(100, 200, 100),
@@ -30,18 +30,18 @@ local RATING_COLORS = {
 }
 local DEFAULT_RATING_COLOR = RATING_COLORS["Common"]
 
--- <<< Ãß°¡: ±âº» ½½·Ô ÀÌ¹ÌÁö ID ¹× Åõ¸íµµ (EquipmentUIBuilder¿Í µ¿ÀÏÇÏ°Ô ¼³Á¤ ¶Ç´Â °øÀ¯ ¸ğµâ¿¡¼­ °¡Á®¿À±â) >>>
--- Áß¿ä: ¾Æ·¡ IDµéÀº ½ÇÁ¦ »ç¿ëÇÏ½Ã´Â ÀÌ¹ÌÁö ID·Î ¹İµå½Ã ±³Ã¼ÇØ¾ß ÇÕ´Ï´Ù!
-local defaultWeaponSlotImage = "rbxassetid://82496229500470"
-local defaultArmorSlotImage = "rbxassetid://YOUR_DEFAULT_ARMOR_ICON_ID"
-local defaultAccessorySlotImage = "rbxassetid://YOUR_DEFAULT_ACCESSORY_ICON_ID"
-local defaultSlotTransparency = 0.3 -- ºó ½½·ÔÀÏ ¶§ ÀÌ¹ÌÁö Åõ¸íµµ
+-- <<< ì¶”ê°€: ê¸°ë³¸ ìŠ¬ë¡¯ ì´ë¯¸ì§€ ID ë° íˆ¬ëª…ë„ (EquipmentUIBuilderì™€ ë™ì¼í•˜ê²Œ ì„¤ì • ë˜ëŠ” ê³µìœ  ëª¨ë“ˆì—ì„œ ê°€ì ¸ì˜¤ê¸°) >>>
+-- ì¤‘ìš”: ì•„ë˜ IDë“¤ì€ ì‹¤ì œ ì‚¬ìš©í•˜ì‹œëŠ” ì´ë¯¸ì§€ IDë¡œ ë°˜ë“œì‹œ êµì²´í•´ì•¼ í•©ë‹ˆë‹¤!
+local defaultWeaponSlotImage = "rbxassetid://122953630794668"
+local defaultArmorSlotImage = "rbxassetid://107446706579540"
+local defaultAccessorySlotImage = "rbxassetid://102260956806130"
+local defaultSlotTransparency = 0.3 -- ë¹ˆ ìŠ¬ë¡¯ì¼ ë•Œ ì´ë¯¸ì§€ íˆ¬ëª…ë„
 
--- UI ÇÁ·¹ÀÓ ÂüÁ¶ º¯¼ö
+-- UI í”„ë ˆì„ ì°¸ì¡° ë³€ìˆ˜
 local inventoryFrame = nil
 local equipmentFrame = nil
 
--- ¸ğµâ ÃÊ±âÈ­ ÇÔ¼ö
+-- ëª¨ë“ˆ ì´ˆê¸°í™” í•¨ìˆ˜
 function InventoryUIManager.Init()
 	ModuleManager = require(ReplicatedStorage.Modules:WaitForChild("ModuleManager"))
 	ItemDatabase = ModuleManager:GetModule("ItemDatabase")
@@ -76,7 +76,7 @@ function InventoryUIManager.SetupUIReferences()
 	end
 end
 
--- ÀÎº¥Åä¸® ¾ÆÀÌÅÛ ¸ñ·Ï Ã¤¿ì±â ÇÔ¼ö (±âÁ¸ ÄÚµå À¯Áö)
+-- ì¸ë²¤í† ë¦¬ ì•„ì´í…œ ëª©ë¡ ì±„ìš°ê¸° í•¨ìˆ˜ (ê¸°ì¡´ ì½”ë“œ ìœ ì§€)
 function InventoryUIManager.PopulateInventoryItems(inventoryData, equippedItems)
 	if not inventoryFrame then
 		InventoryUIManager.SetupUIReferences()
@@ -99,7 +99,7 @@ function InventoryUIManager.PopulateInventoryItems(inventoryData, equippedItems)
 	if not inventoryData or #inventoryData == 0 then
 		if GuiUtils and GuiUtils.CreateTextLabel then
 			local emptyLabel = GuiUtils.CreateTextLabel(inventoryList, "EmptyLabel",
-				UDim2.new(0.5, 0, 0.1, 0), UDim2.new(0.9, 0, 0.1, 0), "ÀÎº¥Åä¸®°¡ ºñ¾î ÀÖ½À´Ï´Ù.",
+				UDim2.new(0.5, 0, 0.1, 0), UDim2.new(0.9, 0, 0.1, 0), "ì¸ë²¤í† ë¦¬ê°€ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.",
 				Vector2.new(0.5, 0), Enum.TextXAlignment.Center, Enum.TextYAlignment.Center, 16)
 			if emptyLabel then emptyLabel.TextColor3 = Color3.fromRGB(200, 200, 200) end
 		end
@@ -180,11 +180,11 @@ function InventoryUIManager.PopulateInventoryItems(inventoryData, equippedItems)
 						TooltipManager.ShowTooltip(tooltipInfo, false, mousePos, "Inventory")
 					end
 				else
-					warn("InventoryUIManager: TooltipManager ¶Ç´Â ShowTooltip ÇÔ¼ö¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.")
+					warn("InventoryUIManager: TooltipManager ë˜ëŠ” ShowTooltip í•¨ìˆ˜ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.")
 				end
 			end)
 		else
-			warn("InventoryUIManager: ItemDatabase¿¡¼­ ID°¡ " .. itemId .. "ÀÎ ¾ÆÀÌÅÛ Á¤º¸¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.")
+			warn("InventoryUIManager: ItemDatabaseì—ì„œ IDê°€ " .. itemId .. "ì¸ ì•„ì´í…œ ì •ë³´ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.")
 		end
 	end
 
@@ -212,14 +212,14 @@ function InventoryUIManager.RefreshInventoryDisplay()
 	if successInv and successEqp then
 		if typeof(inventoryData) == "table" and typeof(equippedItems) == "table" then
 			InventoryUIManager.PopulateInventoryItems(inventoryData, equippedItems)
-			InventoryUIManager.UpdateEquipmentFrame() -- ÀåºñÃ¢µµ ÇÔ²² ¾÷µ¥ÀÌÆ®
+			InventoryUIManager.UpdateEquipmentFrame() -- ì¥ë¹„ì°½ë„ í•¨ê»˜ ì—…ë°ì´íŠ¸
 		else
-			warn("InventoryUIManager: RefreshInventoryDisplay - ¼­¹ö·ÎºÎÅÍ Àß¸øµÈ µ¥ÀÌÅÍ ¼ö½Å:", inventoryData, equippedItems)
+			warn("InventoryUIManager: RefreshInventoryDisplay - ì„œë²„ë¡œë¶€í„° ì˜ëª»ëœ ë°ì´í„° ìˆ˜ì‹ :", inventoryData, equippedItems)
 			InventoryUIManager.PopulateInventoryItems({}, {})
 			InventoryUIManager.UpdateEquipmentFrame()
 		end
 	else
-		warn("InventoryUIManager: RefreshInventoryDisplay - ¼­¹ö µ¥ÀÌÅÍ ¿äÃ» ½ÇÆĞ:", inventoryData, equippedItems)
+		warn("InventoryUIManager: RefreshInventoryDisplay - ì„œë²„ ë°ì´í„° ìš”ì²­ ì‹¤íŒ¨:", inventoryData, equippedItems)
 		InventoryUIManager.PopulateInventoryItems({}, {})
 		InventoryUIManager.UpdateEquipmentFrame()
 	end
@@ -249,12 +249,12 @@ function InventoryUIManager.ShowInventory(show)
 	print("InventoryUIManager: InventoryFrame visibility process for", show)
 end
 
--- ##### UpdateEquipmentFrame ÇÔ¼ö ¼öÁ¤ #####
--- InventoryUIManager.lua ÆÄÀÏ ³»¿¡ ÀÌ ÇÔ¼ö¸¦ Ã£¾Æ¼­ ¾Æ·¡ ³»¿ëÀ¸·Î ¹Ù²ãÁÖ¼¼¿ä.
+-- ##### UpdateEquipmentFrame í•¨ìˆ˜ ìˆ˜ì • #####
+-- InventoryUIManager.lua íŒŒì¼ ë‚´ì— ì´ í•¨ìˆ˜ë¥¼ ì°¾ì•„ì„œ ì•„ë˜ ë‚´ìš©ìœ¼ë¡œ ë°”ê¿”ì£¼ì„¸ìš”.
 
--- ##### UpdateEquipmentFrame ÇÔ¼ö ¼öÁ¤ (Å×µÎ¸® À¯Áö, ¾ÆÀÌÄÜ ºĞ¸® Àû¿ë) #####
+-- ##### UpdateEquipmentFrame í•¨ìˆ˜ ìˆ˜ì • (í…Œë‘ë¦¬ ìœ ì§€, ì•„ì´ì½˜ ë¶„ë¦¬ ì ìš©) #####
 function InventoryUIManager.UpdateEquipmentFrame()
-	print("InventoryUIManager: Updating Equipment Frame (½½·Ô µğÀÚÀÎ °³¼± - ¾ÆÀÌÄÜ ºĞ¸® Àû¿ë)...")
+	print("InventoryUIManager: Updating Equipment Frame (ìŠ¬ë¡¯ ë””ìì¸ ê°œì„  - ì•„ì´ì½˜ ë¶„ë¦¬ ì ìš©)...")
 	if not equipmentFrame then
 		InventoryUIManager.SetupUIReferences()
 		if not equipmentFrame then
@@ -274,7 +274,7 @@ function InventoryUIManager.UpdateEquipmentFrame()
 	for slotName, slotButton in pairs(slots) do
 		if not slotButton then
 			warn("InventoryUIManager: Equipment slot UI element '" .. slotName .. "' not found!")
-			return -- Áß¿äÇÑ UI ¿ä¼Ò°¡ ¾øÀ¸¸é Áß´Ü
+			return -- ì¤‘ìš”í•œ UI ìš”ì†Œê°€ ì—†ìœ¼ë©´ ì¤‘ë‹¨
 		end
 	end
 
@@ -285,42 +285,42 @@ function InventoryUIManager.UpdateEquipmentFrame()
 	end
 
 	for slotName, slotButton in pairs(slots) do
-		-- ½½·Ô ¹öÆ° ³»ºÎÀÇ DefaultSlotIcon°ú EquippedItemIcon ImageLabel ÂüÁ¶
+		-- ìŠ¬ë¡¯ ë²„íŠ¼ ë‚´ë¶€ì˜ DefaultSlotIconê³¼ EquippedItemIcon ImageLabel ì°¸ì¡°
 		local defaultIconLabel = slotButton:FindFirstChild("DefaultSlotIcon")
 		local equippedItemIconLabel = slotButton:FindFirstChild("EquippedItemIcon")
-		local ratingStroke = slotButton:FindFirstChild("RatingStroke") -- UIStroke´Â slotButton¿¡ Á÷Á¢ Àû¿ëµÊ
-		local levelLabel = slotButton:FindFirstChild("LevelLabel") -- °­È­ ·¹º§ Ç¥½Ã¿ë (Builder¿¡¼­ »ı¼º)
+		local ratingStroke = slotButton:FindFirstChild("RatingStroke") -- UIStrokeëŠ” slotButtonì— ì§ì ‘ ì ìš©ë¨
+		local levelLabel = slotButton:FindFirstChild("LevelLabel") -- ê°•í™” ë ˆë²¨ í‘œì‹œìš© (Builderì—ì„œ ìƒì„±)
 
-		-- ÇÊ¼ö UI ¿ä¼ÒµéÀÌ ÀÖ´ÂÁö È®ÀÎ
+		-- í•„ìˆ˜ UI ìš”ì†Œë“¤ì´ ìˆëŠ”ì§€ í™•ì¸
 		if not (defaultIconLabel and equippedItemIconLabel and ratingStroke) then
 			warn("InventoryUIManager: Slot '" .. slotName .. "' is missing essential child elements (DefaultSlotIcon, EquippedItemIcon, or RatingStroke)!")
-			-- ÀÌ ½½·Ô¿¡ ´ëÇÑ Ã³¸®¸¦ °Ç³Ê¶Ù°í ´ÙÀ½ ½½·ÔÀ¸·Î ³Ñ¾î°¨
+			-- ì´ ìŠ¬ë¡¯ì— ëŒ€í•œ ì²˜ë¦¬ë¥¼ ê±´ë„ˆë›°ê³  ë‹¤ìŒ ìŠ¬ë¡¯ìœ¼ë¡œ ë„˜ì–´ê°
 		else
 			local itemData = equippedItems[slotName]
 			local itemId = itemData and itemData.itemId
 
-			-- °­È­ ·¹º§ ·¹ÀÌºí ÃÊ±âÈ­
+			-- ê°•í™” ë ˆë²¨ ë ˆì´ë¸” ì´ˆê¸°í™”
 			if levelLabel then levelLabel.Visible = false end
-			-- µî±Ş Å×µÎ¸® ÃÊ±âÈ­ (±âº» Å×µÎ¸®´Â ImageButtonÀÇ BorderSizePixel·Î Ç×»ó º¸ÀÓ)
-			ratingStroke.Transparency = 1 -- ¾ÆÀÌÅÛ µî±Ş Å×µÎ¸®´Â ÀÏ´Ü ¼û±è
+			-- ë“±ê¸‰ í…Œë‘ë¦¬ ì´ˆê¸°í™” (ê¸°ë³¸ í…Œë‘ë¦¬ëŠ” ImageButtonì˜ BorderSizePixelë¡œ í•­ìƒ ë³´ì„)
+			ratingStroke.Transparency = 1 -- ì•„ì´í…œ ë“±ê¸‰ í…Œë‘ë¦¬ëŠ” ì¼ë‹¨ ìˆ¨ê¹€
 
 			if itemId then
 				local itemInfo = ItemDatabase and ItemDatabase.GetItemInfo(itemId)
 				if itemInfo then
-					-- ¾ÆÀÌÅÛ ÀåÂøµÊ: ±âº» ¾ÆÀÌÄÜ ¼û±â°í, ÀåÂøµÈ ¾ÆÀÌÅÛ ¾ÆÀÌÄÜ Ç¥½Ã
+					-- ì•„ì´í…œ ì¥ì°©ë¨: ê¸°ë³¸ ì•„ì´ì½˜ ìˆ¨ê¸°ê³ , ì¥ì°©ëœ ì•„ì´í…œ ì•„ì´ì½˜ í‘œì‹œ
 					defaultIconLabel.Visible = false
 
 					equippedItemIconLabel.Image = itemInfo.ImageId or ""
-					equippedItemIconLabel.ImageTransparency = 0 -- ¼±¸íÇÏ°Ô
+					equippedItemIconLabel.ImageTransparency = 0 -- ì„ ëª…í•˜ê²Œ
 					equippedItemIconLabel.Visible = true
 
-					-- ¾ÆÀÌÅÛ µî±Ş Å×µÎ¸® Ç¥½Ã
+					-- ì•„ì´í…œ ë“±ê¸‰ í…Œë‘ë¦¬ í‘œì‹œ
 					local rating = itemInfo.Rating or "Common"
 					local ratingColor = RATING_COLORS[rating] or DEFAULT_RATING_COLOR
 					ratingStroke.Color = ratingColor
-					ratingStroke.Transparency = 0 -- µî±Ş Å×µÎ¸® Ç¥½Ã
+					ratingStroke.Transparency = 0 -- ë“±ê¸‰ í…Œë‘ë¦¬ í‘œì‹œ
 
-					-- °­È­ ·¹º§ Ç¥½Ã
+					-- ê°•í™” ë ˆë²¨ í‘œì‹œ
 					if levelLabel then
 						local currentLevel = itemData.enhancementLevel or 0
 						if currentLevel > 0 then
@@ -329,25 +329,25 @@ function InventoryUIManager.UpdateEquipmentFrame()
 						end
 					end
 				else
-					-- ¾ÆÀÌÅÛ Á¤º¸´Â ÀÖÀ¸³ª DB¿¡ ¾ø´Â °æ¿ì: ±âº» ¾ÆÀÌÄÜ Ç¥½Ã (¿À·ù »óÈ²)
+					-- ì•„ì´í…œ ì •ë³´ëŠ” ìˆìœ¼ë‚˜ DBì— ì—†ëŠ” ê²½ìš°: ê¸°ë³¸ ì•„ì´ì½˜ í‘œì‹œ (ì˜¤ë¥˜ ìƒí™©)
 					warn("InventoryUIManager: Item info not found in DB for equipped item ID:", itemId, "in slot", slotName)
 					equippedItemIconLabel.Visible = false
 					equippedItemIconLabel.Image = ""
-					defaultIconLabel.Visible = true -- ±âº» ¾ÆÀÌÄÜ ´Ù½Ã Ç¥½Ã
-					-- ±âº» ¾ÆÀÌÄÜ ÀÌ¹ÌÁö´Â ºô´õ¿¡¼­ ¼³Á¤ÇßÀ¸¹Ç·Î ¿©±â¼­´Â Visible¸¸ Á¦¾î
+					defaultIconLabel.Visible = true -- ê¸°ë³¸ ì•„ì´ì½˜ ë‹¤ì‹œ í‘œì‹œ
+					-- ê¸°ë³¸ ì•„ì´ì½˜ ì´ë¯¸ì§€ëŠ” ë¹Œë”ì—ì„œ ì„¤ì •í–ˆìœ¼ë¯€ë¡œ ì—¬ê¸°ì„œëŠ” Visibleë§Œ ì œì–´
 				end
 			else
-				-- ½½·ÔÀÌ ºñ¾úÀ½: ÀåÂøµÈ ¾ÆÀÌÅÛ ¾ÆÀÌÄÜ ¼û±â°í, ±âº» ¾ÆÀÌÄÜ Ç¥½Ã
+				-- ìŠ¬ë¡¯ì´ ë¹„ì—ˆìŒ: ì¥ì°©ëœ ì•„ì´í…œ ì•„ì´ì½˜ ìˆ¨ê¸°ê³ , ê¸°ë³¸ ì•„ì´ì½˜ í‘œì‹œ
 				equippedItemIconLabel.Visible = false
 				equippedItemIconLabel.Image = ""
 
 				defaultIconLabel.Visible = true
-				-- ±âº» ¾ÆÀÌÄÜ ÀÌ¹ÌÁö´Â EquipmentUIBuilder¿¡¼­ ÀÌ¹Ì ¼³Á¤ÇßÀ¸¹Ç·Î ¿©±â¼­´Â Visible¸¸ Á¦¾î
-				-- ±âº» ¾ÆÀÌÄÜÀÇ ImageTransparency´Â EquipmentUIBuilder¿¡¼­ ¼³Á¤ÇÑ °ªÀ» µû¸§ (¿¹: ¼±¸íÇÏ°Ô 0)
+				-- ê¸°ë³¸ ì•„ì´ì½˜ ì´ë¯¸ì§€ëŠ” EquipmentUIBuilderì—ì„œ ì´ë¯¸ ì„¤ì •í–ˆìœ¼ë¯€ë¡œ ì—¬ê¸°ì„œëŠ” Visibleë§Œ ì œì–´
+				-- ê¸°ë³¸ ì•„ì´ì½˜ì˜ ImageTransparencyëŠ” EquipmentUIBuilderì—ì„œ ì„¤ì •í•œ ê°’ì„ ë”°ë¦„ (ì˜ˆ: ì„ ëª…í•˜ê²Œ 0)
 			end
 		end
 	end
-	print("InventoryUIManager: Equipment Frame Updated (¾ÆÀÌÄÜ ºĞ¸® ¹× Å×µÎ¸® À¯Áö Àû¿ëµÊ).")
+	print("InventoryUIManager: Equipment Frame Updated (ì•„ì´ì½˜ ë¶„ë¦¬ ë° í…Œë‘ë¦¬ ìœ ì§€ ì ìš©ë¨).")
 end
 -- ####################################
 
@@ -394,7 +394,7 @@ function InventoryUIManager.ShowTooltipForEquippedSlot(slotName, position)
 				itemInfo.enhancementLevel = itemData.enhancementLevel
 				TooltipManager.ShowTooltip(itemInfo, true, position, "EquipmentSlot")
 			else
-				warn("InventoryUIManager: TooltipManager ¶Ç´Â ShowTooltip ÇÔ¼ö¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.")
+				warn("InventoryUIManager: TooltipManager ë˜ëŠ” ShowTooltip í•¨ìˆ˜ë¥¼ ì°¾ì„ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.")
 			end
 		else
 			warn("InventoryUIManager: Item info not found for equipped item ID:", itemId)
